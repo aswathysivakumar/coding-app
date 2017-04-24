@@ -1,0 +1,44 @@
+<strong class="sub_title"><%= header %></strong>
+<table id="apr_drg_codes" class="table table-bordered list_diagnosis_codes_tab codes_section">
+  <tbody>
+    <tr class="header_encounter">
+      <th class="text-center">Org <%= drg_type %></th>
+      <% if drg_type == 'APR DRG' %>
+        <th class="text-center">SOI</th>
+        <th class="text-center">ROM</th>
+      <% end %>
+      <th class="text-center">Description</th>
+      <th class="text-center">Base Rate</th>
+      <th class="text-center">Weight</th>
+      <th class="text-center">Reim</th>
+      <th class="text-center">+/-</th>
+    </tr>
+    <%= render '/compliance/encounters/audit_process/new_drg_code', type: type,
+               drg_type: drg_type unless code_set.exists? %>
+    <% if code_set.exists? %>
+      <% code_set.each_with_index do |code, i| %>
+        <tr class="light drg_type_ip">
+          <td class="text-center"><%= code.orig_code %></td>
+          <% if type == 'apr_drg' %>
+            <td class="text-center"><%= code.soi %></td>
+            <td class="text-center"><%= code.rom %></td>
+          <% end %>
+          <td><%= code.description %></td>
+          <td class="text-center">
+            <%= code.orig_base_rate.to_s %>
+          </td>
+          <td class="text-center"><%= code.weight || '-' %></td>
+          <td class="text-center">
+            <%= number_to_currency code.orig_reimbursement, precision: 3 %>
+          </td>
+          <td class="text-center">
+            <div align="center">
+              <%= link_to_function(image_tag('delete_code.png'), "delete_code(#{code.id},
+                                   '#{template_type}', '#{type}')")  %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,42 @@
+<br/>
+<% if @informational_comment_data.blank? %>
+  <div style="color: red"><%= 'No Records Found' unless params[:from].blank? %></div>
+<% else %>
+  <h4><%= @report_name %></h4>
+  <h5><%= "Coded Date - #{period(@from, @to)}" %></h5>
+  <h5><%= "Total Accounts - #{@informational_comment_data.values.sum { |x| x[:count] } }" %>
+  </h5>
+  <% @informational_comment_data.each do |key, production_accounts| %>
+    <br/>
+    <h5><%= "#{key} - #{production_accounts[:count]} Accounts" %></h5>
+    <table class='blue_head' cellspacing="0">
+      <tr>
+        <% informational_comment_headers.each do |header| %>
+          <th><%= header %></th>
+        <% end %>
+      </tr>
+      <% production_accounts[:data].each do |production_account| %>
+        <tr>
+          <td class="text-center width95" >
+            <%= display_in_time_zone(production_account.created_at, @user_time_zone, 'date') %>
+          </td>
+          <td class="text-center width109"><%= production_account.account_number %></td>
+          <td class="text-center width80">
+            <%= production_account.date_of_service.to_s(:us_format) rescue '' %>
+          </td>
+          <td class="width250"><%= production_account.all_internal_categories %></td>
+          <td class="width250"><%= production_account.comments %></td>
+          <td class="text-center width125">
+            <%= display_in_time_zone(production_account.created_at, @user_time_zone) %>
+          </td>
+          <td class="text-center width125">
+            <%= production_account.user.full_name %>
+          </td>
+          <td class="text-center width150">
+            <%= production_account.provider || '-' %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  <% end %>
+<% end %>

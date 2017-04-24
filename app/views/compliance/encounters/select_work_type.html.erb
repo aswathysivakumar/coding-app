@@ -1,0 +1,63 @@
+<%= javascript_include_tag 'custom_reports', 'addRow', 'compliance/add_data_entry_details',
+                           'chosen-jquery' %>
+<%= stylesheet_link_tag 'custom_users_view', 'compliance/encounters/data_entry', 'chosen' %>
+
+<style type="text/css">
+  form {
+    margin: 0 !important;
+  }
+  input, button, select, textarea, label {
+    font-family: "Trebuchet MS",Arial !important;
+    font-size: 11px !important;
+  }
+  .chosen-container {
+    font-family: "Trebuchet MS",Arial !important;
+    font-size: 11px !important;
+  }
+  .chosen-container-single .chosen-single {
+    height: 30px;
+  }
+  .chosen-container-single .chosen-single span {
+    margin-top: 2px;
+  }
+</style>
+<h3>
+  <%= title 'Compliance Audit - Data Entry' %>
+  <%= image_tag('spinner.gif', align: 'absmiddle', border: 0, id: 'spinner', style: 'display: none;') %>
+</h3>
+
+<%= render 'shared/messages', model: @encounter %>
+<%= form_tag select_work_type_compliance_encounters_path, id: 'data_entry' do %>
+  <div class='worktype_border'>
+    <table cellspacing="0" cellpadding="1" border="0">
+      <tr>
+        <td>
+          <%= select_tag :work_type, options_from_collection_for_select(@worktypes, 'id',
+                                                                       'full_name_code', @work_type),
+                         prompt: 'Select WorkType', class: 'client_sel_box width500', tabindex: '1',
+                         onKeyDown: 'replaceEnterKeyWithTab(event, this);' %>
+        </td>
+        <td class="text-center" id="data_entry_button">
+          <%= submit_tag 'Next', class: 'btn btn-nav but', tabindex: '1' %>
+        </td>
+      </tr>
+    </table>
+  </div>
+<% end %>
+<p>&nbsp;</p>
+
+<div id='data_entry_details'>
+  <%= render 'data_entry' if params[:show] %>
+</div>
+
+<script type="text/javascript">
+  <% if params[:show] %>
+    $('#work_type').val(<%= @work_type.id %>);
+    $('#work_type').prop('disabled', true).trigger("chosen:updated");
+    $('#data_entry_button').hide();
+    <% unless params[:account_number].blank? %>
+      $('#account_number').val('<%= params[:account_number] %>');
+      $('#account_number').trigger('onblur');
+    <% end %>
+  <% end %>
+</script>

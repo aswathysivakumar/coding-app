@@ -1,0 +1,31 @@
+<%= javascript_include_tag 'compliance/data_entry_save' %>
+
+<div style="width: 75%">
+  <strong class="sub_title">Comments</strong>
+  <table class="table table-bordered discharge_disp_tab" style="width: 74% !important;">
+    <tbody>
+      <tr class="header_encounter">
+        <th>Comments</th>
+      </tr>
+      <tr>
+        <td>
+          <div>
+            <%= text_area_tag 'comments_encounter', @encounter.comment_value, rows: 3,
+                              tabindex: 1, class: 'comment_box',
+                              onblur: "insert_comment('#{@encounter.id}')" %>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <%= hidden_field_tag 'encounter', @encounter.id %>
+  <%= hidden_field_tag 'work_type_value', @work_type.work_type_value %>
+  <%= submit_tag 'Save', class: 'btn btn-nav margin-right5 dataentry', tabindex: 2 %>
+  <%= submit_tag 'Save & Audit', class: 'btn btn-nav margin-right5 dataentry', tabindex: 2 %>
+  <%= submit_tag 'Delete', class: 'btn btn-nav margin-right5',
+                           confirm: 'Do you want to Delete this encounter?',
+                           tabindex: 2 %>
+</div>
+<div style="clear:both"></div>
+<br />

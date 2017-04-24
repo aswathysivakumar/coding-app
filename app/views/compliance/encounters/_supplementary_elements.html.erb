@@ -1,0 +1,6 @@
+<!-- Rendering Discharge Disposition -->
+<%= render 'list_dd_poo_details', header: 'Discharge Disposition', value: @dd,
+           type: 'DischargeDisposition', id: 'dd' if check_dd?(@work_type) %>
+<!-- Rendering Point of Origin -->
+<%= render 'list_dd_poo_details', header: 'Point of Origin', value: @poo,
+             type: 'PointOfOrigin', id: 'poo' if check_poo?(@work_type) %>

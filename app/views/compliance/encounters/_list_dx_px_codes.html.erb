@@ -1,0 +1,103 @@
+<strong class="sub_title"><%= header %></strong>
+<table id="diagnosis_codes" class="table table-bordered list_diagnosis_codes_tab codes_section">
+  <tbody>
+    <tr class="header_encounter">
+      <% main_headers(type).each do |header_name| %>
+        <th class="text-center"><%= header_name %></th>
+      <% end%>
+      <% if type == 'Px' && !@work_type.inpatient? %>
+        <th class="text-center">Mod</th>
+        <th class="text-center">Qty</th>
+      <% end %>
+      <th class="text-center">+/-</th>
+    </tr>
+    <tr>
+      <td width='4%' class="text-center"></td>
+      <td width='11%' class="text-center">
+        <% code_types = codetype_selection(template_type, @work_type) %>
+        <%= select_tag "code_types_#{template_type}",
+                        options_for_select(code_types, @encounter.select_code_type(code_types)),
+                        class: 'input-span1_quarter',
+                        tabindex: '1' %>
+      </td>
+      <td width='15%' class="text-center">
+        <%= text_field_tag "code_#{template_type}", '',
+                           onblur: "getCodeDescription('code_types_#{
+                                    template_type}', 'code_#{template_type}',
+                                    #{div_ids(type)}, #{@encounter.id}, 'orig')",
+                           class: 'input-span1_quarter',
+                           tabindex: '1' %>
+      </td>
+      <td id='<%= desc_id %>' class='ad-margin-left'></td>
+      <% if type == 'Px' %>
+        <div style="display: none">
+          <span id='apc'></span>
+          <span id='weight'></span>
+          <span id='pay_rate'></span>
+          <span id='work_rvu'></span>
+          <span id='rvu_con_factor'></span>
+        </div>
+        <%= hidden_field_tag 'px_code_id' %>
+        <%= hidden_field_tag 'px_code_class' %>
+      <% else %>
+        <td width="6%" class="text-center">
+          <%= select_tag 'poa', options_for_select(poa_values), class: 'input-span_3_quarters',
+                         tabindex: '1' %>
+        </td>
+      <% end %>
+      <% if type == 'Px' && !@work_type.inpatient? %>
+        <td width="2%" class="text-center">
+          <%= text_field_tag 'modifier', '', class: 'input-span1_quarter',
+                             tabindex: '1' %>
+        </td>
+        <td width="2%" class="text-center">
+          <%= text_field_tag 'quantity', '', class: 'input-span1_quarter',
+                             tabindex: '1' %>
+        </td>
+      <% end %>
+      <td width="4%" class="text-center">
+        <%= submit_tag 'Add', class: 'btn btn-nav', id: "#{template_type}_add_codes",
+                        tabindex: '1',
+                        onclick: "event.preventDefault();
+                                  add_codes('#{template_type}',
+                                            #{@encounter.id}, '#{type}', '#{desc_id}')" %>
+      </td>
+      <%= hidden_field_tag 'dx_code_id' %>
+      <%= hidden_field_tag 'dx_code_class' %>
+    </tr>
+    <% unless code_set.blank? %>
+      <% code_set.each_with_index do |code_value, index| %>
+        <% code = code_value.orig_code_category %>
+        <tr>
+          <td class="text-center"><%= index + 1 %></td>
+          <td class="text-center"><%= code_value.code_type %></td>
+          <td class="text-center"><%= code.name %></td>
+          <td><%= code.description %></td>
+          <% if type == 'Px' %>
+            <div style="display: none">
+              <span><%= code.apc if code_value.maintype == 'CPT' %></span>
+              <span><%= code.weight %></span>
+              <span>
+                <%= number_to_currency(code.payment_rate) if code_value.maintype == 'CPT' %>
+              </span>
+              <span><%= code.work_rvu if code_value.pro_cpt? %></span>
+              <span><%= code.rvu_conversion_factor if code_value.pro_cpt? %></span>
+            </div>
+          <% else %>
+            <td class="text-center"><%= code_value.orig_poa %></td>
+          <% end %>
+          <% if type == 'Px' && !@work_type.inpatient? %>
+            <td class="text-center"><%= code_value.modifier %></td>
+            <td class="text-center"><%= code_value.quantity %></td>
+          <% end %>
+          <td>
+            <div align="center">
+              <%= link_to_function(image_tag('delete_code.png'),
+                                   "delete_code(#{code_value.id}, '#{template_type}', '#{type}')") %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

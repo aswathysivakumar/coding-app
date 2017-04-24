@@ -1,0 +1,8 @@
+<% check_drg(@work_type).each do |drg_type| %>
+  <div class="width75-perc" id="add_codes_<%= drg_type[:value] %>">
+    <%= render '/compliance/encounters/drg_codes', drg_type: drg_type[:db], header: drg_type[:header],
+               type: drg_type[:value], template_type: drg_type[:db],
+               code_set: @encounter.code_list(drg_type[:db]) %>
+  </div>
+  <div style="clear:both"></div><br />
+<% end %>

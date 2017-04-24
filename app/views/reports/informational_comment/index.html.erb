@@ -1,0 +1,45 @@
+<%= javascript_include_tag 'custom_reports' %>
+<%= stylesheet_link_tag 'custom_reports' %>
+<h5 style="color: #255880;"><%= @report_name %></h5>
+<%= form_tag(reports_informational_comment_index_path, id: 'form_name') do %>
+  <div>
+    <div>
+      <table class='coder_prod_table form-inline' cellspacing="0">
+        <tr>
+          <td>
+            <%= text_field_tag :from, nil, value: @from_date, size: 10, readonly: 'readonly', id: 'from',
+                                           class: 'date_range_text width175', style: 'cursor:pointer' %>
+          </td>
+          <td id="show-active">
+            <%= render 'reports/dashboard/work_types_multiselect' %>
+          </td>
+          <%= hidden_field_tag :chart_status, 'Excl.Completed' %>
+          <% if @current_user.elite_group? %>
+            <td><%= render '/reports/time_zone' %></td>
+          <% end %>
+          <% if @current_user.is_admin? || @current_user.user_admin? %>
+            <td>
+              <label>
+                <%= check_box_tag 'ChkUsr', nil, params[:ChkUsr], { id: 'inactive_work_types' } %> Inc Inactive
+              </label>
+            </td>
+          <% end %>
+          <td>
+            <%= submit_tag 'View', title: "Click here to View Report", class: "btn btn-primary btn-medium" %>
+          </td>
+          <td>
+            <%= submit_tag 'Export', title: "Click here to View Report", class: "btn btn-primary btn-medium" %>
+          </td>
+          <% if @current_user.is_admin? %>
+            <td class="span3">
+              <%= render 'reports/saved_filters', path: reports_informational_comment_index_path %>
+            </td>
+          <% end %>
+        </tr>
+      </table>
+    </div>
+  </div>
+  <div style="clear:both;"></div>
+  <%= render 'informational_comment_report' %>
+<% end %>
+

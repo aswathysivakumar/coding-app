@@ -1,0 +1,63 @@
+<tbody>
+  <tr>
+    <td>
+      <div class="encounter_span2">
+        <label class="radio">
+          <%= radio_button_tag 'data_entry_mode', 'All Codes', true, id: 'dataentrymode',
+                               tabindex: '1', onKeyDown: 'replaceEnterKeyWithTab(event, this);'
+          %>All Codes
+        </label>
+        <label class="radio">
+          <%= radio_button_tag 'data_entry_mode', 'Exception Only', false, id: 'dataentrymode1',
+                               tabindex: '2', onKeyDown: 'replaceEnterKeyWithTab(event, this);'
+          %>Exception Only
+        </label>
+      </div>
+    </td>
+    <td>
+      <div class="encounter_span2">
+        <%= text_field_tag 'account_number', '', class: 'existing_account_enc input-span2  margin-top1',
+                           tabindex: '3', onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                           onblur: 'load_encounter_details();' %>
+      </div>
+    </td>
+    <td>
+      <%= text_field_tag :medical_record_number, '', id: 'medical_record_number',
+                         tabindex: '4', onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                         disabled: false, class: 'width125 margin-top1' %>
+    </td>
+    <td>
+      <span>
+        <%= text_field_tag :admit_date, params[:admit_date], maxlength: 10,
+                           id: 'admit_date_id', class: 'datepick_attached width100
+                                                        margin-top1',
+                           tabindex: '5', onblur: "valid_date('admit_date_id')",
+                           onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                           onchange: "calculate_los('admit_date_id', 'header_dos_id', 'los')",
+                           disabled: !@work_type.inpatient? %>
+      </span>
+    </td>
+    <td>
+      <div class="encounter_span2">
+        <%= text_field_tag :header_date_of_service, '', maxlength: 10, id: 'header_dos_id',
+                           class: 'datepick_attached width100', tabindex: '6',
+                           onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                           onchange: "calculate_los('admit_date_id', 'header_dos_id', 'los')",
+                           disabled: false, class: 'width100 margin-top1' %>
+      </div>
+    </td>
+    <td>
+      <%= number_field_tag :los, params[:los], id: 'los', tabindex: '7',
+                         onKeyDown: 'replaceEnterKeyWithTab(event, this);
+                                     preventbackevent(event);',
+                         readonly: true, class: 'width125 margin-top1' %>
+    </td>
+     <td>
+      <%= select_tag :payer,
+                     options_from_collection_for_select(mapped_payers, 'compliance_payer_id',
+                     'payer_full_name', params[:payer]), prompt: 'Select Payer',
+                     tabindex: '8', onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                     disabled: false, class: 'width140' %>
+    </td>
+  </tr>
+</tbody>

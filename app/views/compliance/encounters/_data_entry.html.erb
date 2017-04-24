@@ -1,0 +1,42 @@
+<%= javascript_include_tag 'compliance/data_entry', 'compliance/code_details' %>
+<%= stylesheet_link_tag 'modified_data_entry', 'custom-bootstrap' %>
+
+<%= form_tag save_data_entry_compliance_encounters_path, id: 'data_entry_form' do %>
+  <div id='inner_data_entry'>
+    <h5 class="sub_title">Header Category</h5>
+    <input id="mlap_ip" name="mlap_ip" type="hidden" value="true">
+    <div id="desc11" style="display: none;"></div>
+    <table class="table table-bordered create_encounter_table">
+      <thead>
+        <tr class="header_encounter">
+          <% first_row_headers(@worktype_value).each do |key, value| %>
+            <th class="text-center">
+              <div class='<%= value %>'><%= key %></div>
+            </th>
+          <% end %>
+        </tr>
+      </thead>
+      <%= render 'first_row_header_values' %>
+      <thead>
+        <tr class="header_encounter">
+          <% second_row_headers.each do |key, value| %>
+            <th class="text-center">
+              <div class='<%= value %>'><%= key %></div>
+            </th>
+          <% end %>
+          <th></th>
+        </tr>
+      </thead>
+      <%= render 'second_row_header_values' %>
+    </table>
+  </div>
+  <br/>
+  <div id='list_code'></div>
+<% end %>
+<script type="text/javascript">
+  $(document).ready(function () {
+    <% unless @work_type.inpatient? %>
+      $('#admit_date_id').parent().find('.ui-datepicker-trigger').hide();
+    <% end %>
+  });
+</script>

@@ -1,0 +1,80 @@
+<div id='section_toggle_2'>
+  <table id='details_tab'>
+    <% unless params[:range_date].blank? || params[:date_type].blank? %>
+      <tr>
+        <th><span id="date_type_val"></span> Date</th>
+        <th>:</th>
+        <td><%= params[:range_date] %></td>
+      </tr>
+    <% end %>
+    <tr>
+      <th>Total Accounts</th>
+      <th>:</th>
+      <td><%= @encounters.length %></td>
+    </tr>
+    <tr>
+      <th>Client Name</th>
+      <th>:</th>
+      <td><%= @client_name %></td>
+    </tr>
+  </table>
+  <br>
+  <table class="blue_head" cellspacing="0" width="98%" id="complete-work-list">
+    <thead>
+      <tr class="nav-head">
+        <th class='width20 no-sort' data-orderable="false">Sl No</th>
+        <th>Account Number</th>
+        <th>MRN</th>
+        <% if @inpatient %>
+          <th>Admit Date</th>
+        <% end %>
+        <th><%= discharge_date_header(@inpatient) %></th>
+        <th>Coder</th>
+        <th>Coded Date</th>
+        <th>Auditor</th>
+        <th>Reviewed Date</th>
+        <th>Weighted %</th>
+        <th>Basic %</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @encounters.each_with_index do |encounter, index| %>
+        <tr class="nav-head <%= encounter.state %>" title="<%= encounter.state_title %>">
+          <td class="text-center width50 no-sort"><%= index + 1 %></td>
+          <td class="text-center width130">
+            <%= link_compliance_encounter(encounter) %>
+          </td>
+          <td class="text-center width95">
+            <%= encounter.mrn %>
+          </td>
+          <% if @inpatient %>
+            <td class="text-center width95">
+              <%= date_value(encounter.admit_date) %>
+            </td>
+          <% end %>
+          <td class="text-center width95">
+            <%= date_value(encounter.discharge_date) %>
+          </td>
+          <td class="text-center width125">
+            <%= encounter.coder_name %>
+          </td>
+          <td class="text-center width95">
+            <%= date_value(encounter.coded_date) %>
+          </td>
+          <td class="text-center width125">
+            <%= encounter.auditor_name %>
+          </td>
+          <td class="text-center width125">
+            <%= date_value(encounter.audit_date) %>
+          </td>
+          <td class="text-center width125">
+            <%= encounter.show_weighted_accuracy.to_s %>
+          </td>
+          <td class="text-center width125">
+            <%= encounter.show_basic_accuracy.to_s %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

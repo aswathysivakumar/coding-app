@@ -1,0 +1,20 @@
+<!-- Rendering DX Codes -->
+<div class="width75-perc" id="add_codes_dx">
+  <%= render 'list_dx_px_codes', header: 'Diagnosis Category', type: 'Dx', template_type: 'dx',
+             desc_id: 'desc1', code_set: @dx_codes %>
+</div>
+<div style="clear:both"></div><br />
+<!-- Rendering PX Codes -->
+<div class="width75-perc" id="add_codes_px">
+  <%= render 'list_dx_px_codes', header: 'Procedure Category', type: 'Px', template_type: 'px',
+             desc_id: 'desc2', code_set: @px_codes %>
+</div>
+<div style="clear:both"></div><br />
+<% if @work_type.inpatient? %>
+  <!-- Rendering Discharge Disposition and Point of Origin -->
+  <%= render 'supplementary_elements' %>
+  <!-- Rendering DRG Codes -->
+  <div id="data-entry-all-drgs">
+    <%= render '/compliance/encounters/data_entry_all_drgs' %>
+  </div>
+<% end %>

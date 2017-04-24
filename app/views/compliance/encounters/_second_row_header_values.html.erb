@@ -1,0 +1,51 @@
+<tbody>
+  <tr>
+    <td>
+      <%= text_field_tag :header_date_of_birth, '', maxlength: 10, id: 'header_dob_id',
+                         class: 'datepick_attached width100 margin-top1', tabindex: '9',
+                         onKeyDown: 'replaceEnterKeyWithTab(event, this);', disabled: false %>
+    </td>
+    <td>
+      <%= text_field_tag :age, '', id: 'age', tabindex: '10',
+                         onKeyDown: 'replaceEnterKeyWithTab(event, this);
+                                     preventbackevent(event);',
+                         readonly: true, class: 'width85 margin-top1' %>
+    </td>
+    <td>
+      <%= select_tag :gender,
+                     options_for_select(gender, @gender), prompt: 'Select Gender', tabindex: '11',
+                     onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                     disabled: false, class: 'width140'  %>
+    </td>
+    <td>
+      <%= select_tag 'provider_number',
+                     options_from_collection_for_select(@providers,
+                     'id', 'full_name', params[:provider_number]),
+                     { class: 'width140 margin-top1', prompt: '-- Select --',
+                       tabindex: '12', onKeyDown: 'replaceEnterKeyWithTab(event, this);' }
+      %>
+      <span id="loader" style="display: none">
+        <img src="/assets/spinner.gif" alt="Working..." />
+      </span>
+    </td>
+    <td>
+      <span>
+        <%= text_field_tag :coded_date, params[:coded_date], maxlength: 10, id: 'coded_date_id',
+                           class: 'datepick_attached width100 margin-top1', tabindex: '13',
+                           onblur: "valid_date('coded_date_id')",
+                           onchange: 'validate_coded_date();',
+                           onKeyDown: 'replaceEnterKeyWithTab(event, this);', disabled: false %>
+      </span>
+    </td>
+    <td>
+      <%= select_tag :coder,
+                     options_from_collection_for_select(@coders, 'id',
+                     'full_name', params[:coder]), prompt: 'Select Coder',
+                     tabindex: '14', onKeyDown: 'replaceEnterKeyWithTab(event, this);',
+                     disabled: false, class: 'width140' %>
+    </td>
+    <td colspan="2" class="text-center">
+      <%= submit_tag 'Add', class: 'btn btn-nav', id: 'add_data_entry_headers', tabindex: '15' %>
+    </td>
+  </tr>
+</tbody>

@@ -1,0 +1,23 @@
+<div class="width75-perc">
+  <strong class="sub_title"><%= header %></strong>
+  <table class="table table-bordered discharge_disp_tab" style="width: 74% !important;">
+    <tbody>
+      <tr class="header_encounter">
+        <th><%= header %></th>
+      </tr>
+      <tr>
+        <td>
+          <div class="encounter_span4">
+            <%= select_tag "supplementary_elem_#{id}",
+                           options_from_collection_for_select(value, 'id',
+                           'description', @encounter.dd_poo_value(type)),
+                           class: 'width680',
+                           onchange: "save_dd_poo(#{@encounter.id}, '#{type}', '#{id}')" %>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div style="clear:both"></div>
+<br />

@@ -1,0 +1,30 @@
+<%= javascript_include_tag 'compliance/encounter_exception' %>
+<div style="width: 62%;float: left;">
+  <strong class="sub_title">Total Codes</strong>
+  <span id="diagnosis_upd">
+    <table id="diagnosis_codes" class="table table-bordered list_diagnosis_codes_tab codes_section code_review_table auditing_area compliance_codes_entry " style="width: 100% !important">
+      <tbody>
+        <tr class="header_encounter">
+          <% exception_headers(@work_type).each do |header| %>
+           <th class="text-center"><%= header %></th>
+          <% end %>
+          <% unless @work_type.inpatient? %>
+            <th class="text-center">Mod</th>
+            <th class="text-center">Qty</th>
+          <% end %>
+        </tr>
+        <%= hidden_field_tag 'enc_value', @encounter.id %>
+        <tr>
+          <% exception_header_values(@work_type).each do |value| %>
+            <td>
+              <%= text_field_tag "#{value}", exception_value(@encounter, "#{value}"),
+                                 class: 'width80 exception_code' %>
+            </td>
+          <% end %>
+        </tr>
+      </tbody>
+    </table>
+  </span>
+</div>
+<div style="clear: both;"></div>
+<br />
